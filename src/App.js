@@ -39,7 +39,12 @@ function App() {
     <div className="App">
       <div className="tasks">
         <TaskForm create={createTask}/>
-        <TaskList tasks={tasks} title="Список дел" removeTask={removeTask}/>
+        {tasks.length 
+          ? 
+          <TaskList tasks={tasks} title="Список дел" removeTask={removeTask}/> 
+          : 
+          <h1 style={{textAlign: "center"}} className="tasks__title">Список дел пустой!</h1>
+        }
       </div>
     </div>
   );

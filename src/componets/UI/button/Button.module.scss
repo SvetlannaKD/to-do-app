@@ -6,4 +6,9 @@
     background: teal;
     color: white;
     border: none;
+
+    &:hover {
+        background: rgb(20, 95, 95);
+        transform: scale(1.02);
+    }
 }
