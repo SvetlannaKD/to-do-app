@@ -4,6 +4,7 @@ import {nanoid} from 'nanoid';
 import './styles/App.scss';
 import TaskList from './componets/TaskList';
 import TaskForm from './componets/TaskForm';
+import Select from './componets/UI/select/Select';
 
 const initTasks = [
   {
@@ -26,19 +27,37 @@ const initTasks = [
 function App() {
 
   const [tasks, setTasks] = useState(initTasks);
-  
-  function createTask (newTask) {
-     setTasks([...tasks, newTask]);
-  }
 
-  function removeTask (task) {
-      setTasks(tasks.filter((t) => t.id !== task.id));  
-  }
+  const [selectedSort, setSelectedSort] = useState("");
+  
+  const createTask = (newTask) => {
+    setTasks([...tasks, newTask]);
+  };
+
+  const removeTask = (task) => {
+    setTasks(tasks.filter((t) => t.id !== task.id));  
+  };
+
+  const sortTasks = (valueSort) => {
+    setSelectedSort(valueSort);
+    setTasks([...tasks].sort((a, b) => a[valueSort].localeCompare(b[valueSort])));
+  };
 
   return (
     <div className="App">
       <div className="tasks">
         <TaskForm create={createTask}/>
+        <hr style={{margin: "15px 0"}}></hr>
+        <Select 
+          value={selectedSort}
+          onChange={sortTasks}
+          defaultValue="Сортировка" 
+          options={[
+            {value: "title", name: "По названию"},
+            {value: "text", name: "По описанию"}
+          ]}
+          selectClass={"select"}
+        />
         {tasks.length 
           ? 
           <TaskList tasks={tasks} title="Список дел" removeTask={removeTask}/> 

@@ -1,7 +1,5 @@
 import TaskItem from "./TaskItem";
 
-
-
 function TaskList ({tasks, title, removeTask}) {
 
     return (

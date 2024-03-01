@@ -7,12 +7,12 @@ function TaskForm ({create}) {
 
     const [valueTask, setValueTask] = useState({title: "", text: ""});
 
-    function addNewTask (ev) {
+    const addNewTask = (ev) => {
         ev.preventDefault();
         const newTask = {...valueTask, id: nanoid(10)}
         create(newTask);
         setValueTask({title: "", text: ""});
-    }
+    };
 
     return (
         <form className="form">
@@ -31,6 +31,6 @@ function TaskForm ({create}) {
             <Button buttonClass={"form__button"} onClick={addNewTask}>Добавить дело</Button>
         </form>
     );
-}
+};
 
 export default TaskForm;

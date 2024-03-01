@@ -3,7 +3,7 @@ import classes from './Button.module.scss';
 function Button ({children, buttonClass, ...props}) {
 
     return (
-        <button className={`${buttonClass} ${classes.button}`} {...props}>
+        <button className={`${buttonClass ? buttonClass + " " : ""}${classes.button}`} {...props}>
             {children}
         </button>
     );

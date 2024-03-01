@@ -1,8 +1,10 @@
 import classes from './Input.module.scss';
 
-function Input (props) {
+function Input ({children, inputClass, ...props}) {
     return (
-        <input className={classes.input} {...props}></input>
+        <input className={`${inputClass ? inputClass + " " : ""}${classes.input}`} {...props}>
+            {children}
+        </input>
     );
 }
 
