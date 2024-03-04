@@ -5,6 +5,8 @@ import Input from './UI/input/Input';
 
 function TaskForm ({create}) {
 
+    console.log("---render Form---");
+
     const [valueTask, setValueTask] = useState({title: "", text: ""});
 
     const addNewTask = (ev) => {

@@ -1,6 +1,9 @@
 import Button from "./UI/button/Button";
 
 function TaskItem ({task, number, removeTask}) {
+
+    console.log(`---render Item ${number}---`); 
+    
     return (
         <div className="tasks__item">
             <div className="tasks__item-content">

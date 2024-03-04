@@ -1,6 +1,8 @@
 import TaskItem from "./TaskItem";
 
 function TaskList ({tasks, title, removeTask}) {
+  
+  console.log("---render List---"); 
 
     return (
         <>
