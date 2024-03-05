@@ -5,6 +5,8 @@ import './styles/App.scss';
 import TaskList from './componets/TaskList';
 import TaskForm from './componets/TaskForm';
 import TaskFilter from './componets/TaskFilter';
+import Modal from './componets/UI/modal/Modal';
+import Button from './componets/UI/button/Button';
 
 const initTasks = [
   {
@@ -30,6 +32,8 @@ function App() {
 
   const [filter, setFilter] = useState({sort: "", query: ""});
 
+  const [modal, setModal] = useState(false);
+
   const sortedTasks = useMemo(() => {
     if (filter.sort) {
       return [...tasks].sort((a, b) => a[filter.sort].localeCompare(b[filter.sort]));
@@ -54,6 +58,7 @@ function App() {
   
   const createTask = (newTask) => {
     setTasks([...tasks, newTask]);
+    setModal(false);
   };
 
   const removeTask = (task) => {
@@ -63,7 +68,10 @@ function App() {
   return (
     <div className="App">
       <div className="tasks">
-        <TaskForm create={createTask}/>
+        <Button buttonClass={"tasks__button"} onClick={() => setModal(true)}>Создать новое дело</Button>
+        <Modal visible={modal} setVisible={setModal}>
+          <TaskForm create={createTask}/>
+        </Modal>
         <hr style={{margin: "15px 0"}}></hr>
         <TaskFilter filter={filter} setFilter={setFilter}/>
         <TaskList tasks={sortedAndSearchedTasks} title="Список дел" removeTask={removeTask}/> 
