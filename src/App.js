@@ -13,6 +13,7 @@ import PostsFilter from './componets/PostsFilter';
 import { useEffect } from 'react';
 import PostService from './API/PostService';
 import Loader from './componets/UI/loader/Loader';
+import { useFetching } from './hooks/useFetching';
 
 const initTasks = [
   {
@@ -48,7 +49,11 @@ function App() {
 
   const sortedAndSearchedPosts = useList(posts, filterPosts.sort, filterPosts.query);
 
-  const [isPostsLoading, setIsPostsLoading] = useState(false);
+  const [fetchPosts, isPostsLoading, postError] = useFetching(async() => {
+    const posts = await PostService.getAll();
+    setTimeout(()=>console.log("postError22222:", postError), 10000) ;
+    setPosts(posts);
+  });
 
   useEffect(() => {
     fetchPosts();
@@ -58,15 +63,6 @@ function App() {
     setTasks([...tasks, newTask]);
     setModal(false);
   };
-
-  async function fetchPosts () {
-    setIsPostsLoading(true);
-    setTimeout(async() => {
-      const posts = await PostService.getAll();
-      setPosts(posts);
-      setIsPostsLoading(false);
-    }, 1000);
-  }
 
   const removeTask = (task) => {
     setTasks(tasks.filter((t) => t.id !== task.id));  
@@ -88,7 +84,8 @@ function App() {
         <TaskList tasks={sortedAndSearchedTasks} title="Список дел" removeTask={removeTask}/> 
         <hr style={{margin: "15px 0"}}></hr>
         <PostsFilter filter={filterPosts} setFilter={setFilterPosts}/>
-        {isPostsLoading
+        {postError && <h1>Произошла ошибка: {postError}</h1>}
+        {isPostsLoading 
           ? <div style={{display: 'flex', justifyContent: 'center', marginTop: 50}}>
               <Loader />
             </div>
