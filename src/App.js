@@ -12,6 +12,7 @@ import PostsList from './componets/PostsList';
 import PostsFilter from './componets/PostsFilter';
 import { useEffect } from 'react';
 import PostService from './API/PostService';
+import Loader from './componets/UI/loader/Loader';
 
 const initTasks = [
   {
@@ -88,7 +89,9 @@ function App() {
         <hr style={{margin: "15px 0"}}></hr>
         <PostsFilter filter={filterPosts} setFilter={setFilterPosts}/>
         {isPostsLoading
-          ? <h1>Идет загрузка...</h1>
+          ? <div style={{display: 'flex', justifyContent: 'center', marginTop: 50}}>
+              <Loader />
+            </div>
           : <PostsList posts={sortedAndSearchedPosts} title="Список постов" removePost={removePost}/> 
         }
       </div>
