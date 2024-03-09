@@ -2,7 +2,6 @@
 import {useMemo, useState} from 'react';
 import {nanoid} from 'nanoid';
 import {useList} from './hooks/useList';
-import axios from 'axios'
 import './styles/App.scss';
 import TaskList from './componets/TaskList';
 import TaskForm from './componets/TaskForm';
@@ -12,6 +11,7 @@ import Button from './componets/UI/button/Button';
 import PostsList from './componets/PostsList';
 import PostsFilter from './componets/PostsFilter';
 import { useEffect } from 'react';
+import PostService from './API/PostService';
 
 const initTasks = [
   {
@@ -57,9 +57,8 @@ function App() {
   };
 
   async function fetchPosts () {
-    const response = await axios.get("https://jsonplaceholder.typicode.com/posts");
-    console.log(response.data);
-    setPosts(response.data);
+    const posts = await PostService.getAll();
+    setPosts(posts);
   }
 
   const removeTask = (task) => {
