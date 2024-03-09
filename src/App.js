@@ -47,6 +47,8 @@ function App() {
 
   const sortedAndSearchedPosts = useList(posts, filterPosts.sort, filterPosts.query);
 
+  const [isPostsLoading, setIsPostsLoading] = useState(false);
+
   useEffect(() => {
     fetchPosts();
   }, []);
@@ -57,8 +59,12 @@ function App() {
   };
 
   async function fetchPosts () {
-    const posts = await PostService.getAll();
-    setPosts(posts);
+    setIsPostsLoading(true);
+    setTimeout(async() => {
+      const posts = await PostService.getAll();
+      setPosts(posts);
+      setIsPostsLoading(false);
+    }, 1000);
   }
 
   const removeTask = (task) => {
@@ -81,7 +87,10 @@ function App() {
         <TaskList tasks={sortedAndSearchedTasks} title="Список дел" removeTask={removeTask}/> 
         <hr style={{margin: "15px 0"}}></hr>
         <PostsFilter filter={filterPosts} setFilter={setFilterPosts}/>
-        <PostsList posts={sortedAndSearchedPosts} title="Список постов" removePost={removePost}/> 
+        {isPostsLoading
+          ? <h1>Идет загрузка...</h1>
+          : <PostsList posts={sortedAndSearchedPosts} title="Список постов" removePost={removePost}/> 
+        }
       </div>
     </div>
   );
