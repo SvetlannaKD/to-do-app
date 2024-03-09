@@ -1,12 +1,17 @@
 // import logo from './logo.svg';
-import { useMemo, useState } from 'react';
+import {useMemo, useState} from 'react';
 import {nanoid} from 'nanoid';
+import {useList} from './hooks/useList';
+import axios from 'axios'
 import './styles/App.scss';
 import TaskList from './componets/TaskList';
 import TaskForm from './componets/TaskForm';
 import TaskFilter from './componets/TaskFilter';
 import Modal from './componets/UI/modal/Modal';
 import Button from './componets/UI/button/Button';
+import PostsList from './componets/PostsList';
+import PostsFilter from './componets/PostsFilter';
+import { useEffect } from 'react';
 
 const initTasks = [
   {
@@ -30,39 +35,39 @@ function App() {
 
   const [tasks, setTasks] = useState(initTasks);
 
+  const [posts, setPosts] = useState([]);
+
   const [filter, setFilter] = useState({sort: "", query: ""});
+
+  const [filterPosts, setFilterPosts] = useState({sort: "", query: ""});
 
   const [modal, setModal] = useState(false);
 
-  const sortedTasks = useMemo(() => {
-    if (filter.sort) {
-      return [...tasks].sort((a, b) => a[filter.sort].localeCompare(b[filter.sort]));
-    }
-    return tasks;
-  }, [filter.sort, tasks]);
+  const sortedAndSearchedTasks = useList(tasks, filter.sort, filter.query);
 
-  const isQueryInString = (string, query) => {
-    return string.toLowerCase().includes(query.toLowerCase());
-  };
+  const sortedAndSearchedPosts = useList(posts, filterPosts.sort, filterPosts.query);
 
-  const sortedAndSearchedTasks = useMemo(() => {
-    if (filter.query && filter.query !== " ") {
-      return (
-          sortedTasks.filter((post) => {
-            return isQueryInString(post.title, filter.query) || isQueryInString(post.text, filter.query);
-          })
-        );
-    }
-    return sortedTasks;
-  }, [filter.query, sortedTasks]);
+  useEffect(() => {
+    fetchPosts();
+  }, []);
   
   const createTask = (newTask) => {
     setTasks([...tasks, newTask]);
     setModal(false);
   };
 
+  async function fetchPosts () {
+    const response = await axios.get("https://jsonplaceholder.typicode.com/posts");
+    console.log(response.data);
+    setPosts(response.data);
+  }
+
   const removeTask = (task) => {
     setTasks(tasks.filter((t) => t.id !== task.id));  
+  };
+
+  const removePost = (post) => {
+    setPosts(posts.filter((p) => p.id !== post.id));  
   };
 
   return (
@@ -75,6 +80,9 @@ function App() {
         <hr style={{margin: "15px 0"}}></hr>
         <TaskFilter filter={filter} setFilter={setFilter}/>
         <TaskList tasks={sortedAndSearchedTasks} title="Список дел" removeTask={removeTask}/> 
+        <hr style={{margin: "15px 0"}}></hr>
+        <PostsFilter filter={filterPosts} setFilter={setFilterPosts}/>
+        <PostsList posts={sortedAndSearchedPosts} title="Список постов" removePost={removePost}/> 
       </div>
     </div>
   );

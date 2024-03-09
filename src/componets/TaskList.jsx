@@ -1,11 +1,11 @@
-import TaskItem from "./TaskItem";
+import TaskItem from './TaskItem';
 
 function TaskList ({tasks, title, removeTask}) {
 
   if (!tasks.length) {
     return (
       <h1 style={{textAlign: "center"}} className="tasks__title">
-        Список дел пустой!
+        Список дел пуст!
       </h1>
     );
   }
