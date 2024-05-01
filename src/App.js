@@ -3,7 +3,7 @@ import {useState, useEffect} from 'react';
 import {nanoid} from 'nanoid';
 import {useList} from './hooks/useList';
 import {useFetching} from './hooks/useFetching';
-import {getPageCount, getPagesArray} from './utils/pages';
+import {getPageCount} from './utils/pages';
 import PostService from './API/PostService';
 import './styles/App.scss';
 import TaskList from './componets/TaskList';
@@ -14,6 +14,7 @@ import Button from './componets/UI/button/Button';
 import PostsList from './componets/PostsList';
 import PostsFilter from './componets/PostsFilter';
 import Loader from './componets/UI/loader/Loader';
+import Pagination from './componets/UI/pagination/Pagination';
 
 
 
@@ -57,18 +58,17 @@ function App() {
 
   const sortedAndSearchedPosts = useList(posts, filterPosts.sort, filterPosts.query);
 
-  let pagesArray = getPagesArray(totalPages);
-
-  const [fetchPosts, isPostsLoading, postError] = useFetching(async() => {
+  const [fetchPosts, isPostsLoading, postError] = useFetching(async(limit, page) => {
     const response = await PostService.getAll(limit, page);
-    setTimeout(()=>console.log("postError22222:", postError), 10000) ;
+    setTimeout(()=>console.log("postError:", postError), 10000);
     setPosts(response.data);//получаем ответ от сервера
     const totalCount = response.headers['x-total-count'] //получаем общее количество постов на сервере(100 шт.)
     setTotalPages(getPageCount(totalCount, limit));
   });
 
+  //Загрузка постов по API
   useEffect(() => {
-    fetchPosts();
+    fetchPosts(limit, page);
   }, []);
   
   const createTask = (newTask) => {
@@ -87,7 +87,7 @@ function App() {
   //Изменение номера страницы
   const changePage = (page) => {
     setPage(page);
-    fetchPosts();
+    fetchPosts(limit, page);
   }
 
   return (
@@ -111,22 +111,11 @@ function App() {
             </div>
           : <PostsList posts={sortedAndSearchedPosts} title='Список постов' removePost={removePost}/> 
         }
-        <div className='page__wrapper'>
-          {pagesArray.map((p) => {
-            return (
-              <Button 
-                buttonClass={page === p ? 'page__button active' : 'page__button'} 
-                key={p}
-                onClick={() => changePage(p)}
-              > 
-                {p}
-              </Button>
-            );
-          })}
-        </div>
+        <Pagination totalPages={totalPages} page={page} changePage={changePage}/>
       </div>
     </div>
   );
+
 }
 
 export default App;

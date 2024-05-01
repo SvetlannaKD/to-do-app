@@ -1,11 +1,12 @@
 import PostItem from './PostItem';
 
 function PostsList ({posts, title, removePost}) {
-  if (typeof posts !== "undefined") {
+
+  if (typeof posts !== 'undefined') {
 
     if (!posts.length) {
       return (
-        <h1 style={{textAlign: "center"}} className="posts__title">
+        <h1 style={{textAlign: 'center'}} className='posts__title'>
           Список постов пуст!
         </h1>
       );
@@ -13,17 +14,18 @@ function PostsList ({posts, title, removePost}) {
 
     return (
       <>
-        <h1 style={{textAlign: "center"}} className="posts__title">{title}</h1>
-        <div className="posts__list">
-          {posts.map((post, index) => {
+        <h1 style={{textAlign: 'center'}} className='posts__title'>{title}</h1>
+        <div className='posts__list'>
+          {posts.map((post) => {
             return (
-              <PostItem post={post} key={post.id} number={index + 1} removePost={removePost}/>
+              <PostItem post={post} key={post.id} removePost={removePost}/>
             );
           })}
         </div>
       </>
     );
   }
+  
 }
 
 export default PostsList;
