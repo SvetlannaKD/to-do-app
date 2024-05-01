@@ -1,0 +1,17 @@
+import {Link} from 'react-router-dom';
+
+function Navbar () {
+
+  return (
+    <div className='navbar'>
+      <div className='navbar__links'>
+        <Link to='/about'>О сайте</Link>
+        <Link to='/tasks'>Задачи</Link>
+        <Link to='/posts'>Посты</Link>
+      </div>
+    </div>
+  );
+
+}
+
+export default Navbar;
