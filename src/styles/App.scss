@@ -29,6 +29,12 @@
       &-content-title {
         margin-bottom: 10px;
       }
+      &-buttons {
+        display: flex;
+        &_button {
+          margin-left: 10px;
+        }
+      }
     }
   }
 

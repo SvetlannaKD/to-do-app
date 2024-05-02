@@ -22,10 +22,11 @@ function Posts () {
 
   const sortedAndSearchedPosts = useList(posts, filterPosts.sort, filterPosts.query);
 
+  //Создание функции загрузки постов по API
   const [fetchPosts, isPostsLoading, postError] = useFetching(async(limit, page) => {
     const response = await PostService.getAll(limit, page);
     setTimeout(()=>console.log("postError:", postError), 10000);
-    setPosts(response.data);//получаем ответ от сервера
+    setPosts(response.data);//сохраняем посты с сервера
     const totalCount = response.headers['x-total-count'] //получаем общее количество постов на сервере(100 шт.)
     setTotalPages(getPageCount(totalCount, limit));
   });
