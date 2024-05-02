@@ -27,4 +27,13 @@ export default class PostService {
     return response;
   }
 
+  /**
+   * Загрузка комментариев к посту по API с сервера
+   * @param id {Number} 
+   */
+  static async getCommentsByPostId (id) {
+    const response = await axios.get(`https://jsonplaceholder.typicode.com/posts/${id}/comments`);
+    return response;
+  }
+
 }
